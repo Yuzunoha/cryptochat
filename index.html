@@ -24,8 +24,8 @@
         <th>#</th>
         <th>text</th>
         <th>address</th>
-        <th>date(JST)</th>
-        <th>timestamp(UTC)</th>
+        <th>date(local)</th>
+        <th>timestamp(blockchain)</th>
     </tr>
 	</thead>
 	<tbody id="tbody">
@@ -124,7 +124,7 @@ function update(){
 				s += posts["addr" + i];
 				s += "</td>";
 				s += "<td>";
-				s += unixTime2ymd(intUtcToJst(posts["time" + i]));
+				s += unixTime2ymd(posts["time" + i]);
 				s += "</td>";
 				s += "<td>";
 				s += posts["time" + i];
@@ -163,11 +163,6 @@ function unixTime2ymd(intTime){
     return( year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec );
 }
 
-function intUtcToJst(intUtc){
-    var intJst = Number(intUtc) + 9 * 60 * 60;
-    return intJst;
-}
- 
 </script>
 </body>
 </html>
