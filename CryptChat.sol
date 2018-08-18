@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23; 
 
-contract CryptChat2 {
+contract CryptChat {
     struct Post {
         uint time;
         address addr;
