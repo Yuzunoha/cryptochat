@@ -116,18 +116,6 @@ function set(){
 		// console.log();
 	});
 }
-function withdraw(){
-	var value = document.getElementById("value_withdraw").value;
-	// ガード
-	if(value<=0){
-		alert("valueは1以上の整数を入力してください");
-		return;
-	}
-	// 書き込み
-	contract.withdraw(value, function(err, value){
-		console.log("withdraw tx : " + value);
-	});
-}
  
 </script>
 </body>
