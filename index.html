@@ -24,7 +24,8 @@
         <th>#</th>
         <th>text</th>
         <th>address</th>
-        <th>timestamp</th>
+        <th>date(JST)</th>
+        <th>timestamp(UTC)</th>
     </tr>
 	</thead>
 	<tbody id="tbody">
@@ -123,6 +124,9 @@ function update(){
 				s += posts["addr" + i];
 				s += "</td>";
 				s += "<td>";
+				s += unixTime2ymd(intUtcToJst(posts["time" + i]));
+				s += "</td>";
+				s += "<td>";
 				s += posts["time" + i];
 				s += "</td>";
 				s += "</tr>";
@@ -144,6 +148,24 @@ function set(){
 	contract.set(value_set, function(err, value){
 		// console.log();
 	});
+}
+
+function unixTime2ymd(intTime){
+    // var d = new Date( intTime );
+    var d = new Date( intTime * 1000 );
+    var year  = d.getFullYear();
+    var month = d.getMonth() + 1;
+    var day  = d.getDate();
+    var hour = ( '0' + d.getHours() ).slice(-2);
+    var min  = ( '0' + d.getMinutes() ).slice(-2);
+    var sec   = ( '0' + d.getSeconds() ).slice(-2);
+
+    return( year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec );
+}
+
+function intUtcToJst(intUtc){
+    var intJst = Number(intUtc) + 9 * 60 * 60;
+    return intJst;
 }
  
 </script>
