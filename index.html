@@ -22,7 +22,8 @@
     <thead>
     <tr>
         <th>#</th>
-        <th>contents</th>
+        <th>address</th>
+        <th>text</th>
         <th>timestamp</th>
     </tr>
 	</thead>
@@ -61,37 +62,68 @@ new Promise((resolve)=>{
 
 function update(){
 	var s = "";
-	var posts = [];
 	var promises = [];
-
+	var len;
 	new Promise((resolve)=>{
 		contract.getPostsLength((e,r)=>{
-			var len = r.toNumber();
-			console.log("len : " + len);
+			len = r.toNumber();
 			resolve(len);
 		});
 	}).then((len)=>{
-		for(var i=0; i<len; i++){
-			promises[i] = new Promise((resolve)=>{
-				contract.getText(i, (e, r)=>{
-					resolve(r);
-				});
+		const getPromise = (i, attr) => {
+			return new Promise((resolve) => {
+				switch(attr){
+				case "text":
+					contract.getText(i, (e, r)=>{
+						var key = 'text' + i;
+						var value = r;
+						resolve({[key]: value});
+					});
+					break;
+				case "addr":
+					contract.getAddr(i, (e, r)=>{
+						var key = 'addr' + i;
+						var value = r;
+						resolve({[key]: value});
+					});
+					break;
+				case "time":
+					contract.getTime(i, (e, r)=>{
+						var key = 'time' + i;
+						var value = r.toString();
+						resolve({[key]: value});
+					});
+					break;
+				}
 			});
+		};
+		for(var i=0; i<len; i++){
+			promises.push(getPromise(i, "text"));
+			promises.push(getPromise(i, "addr"));
+			promises.push(getPromise(i, "time"));
 		}
-		console.log(promises.length);
-		Promise.all(promises).then((values)=>{
-			var id = 0;
-			for(var t of values){
+		Promise.all(promises).then((results)=>{
+			var posts = [];
+			for(var result of results){
+				for(var key of Object.keys(result)){
+					console.log("key : " + key);
+					var value = result[key];
+					posts[key] = value;
+				}
+			}
+			for(var i=0; i<len; i++){
 				s += "<tr>";
 				s += "<td>";
-				s += (id++);
+				s += i;
 				s += "</td>";
 				s += "<td>";
-				s += t;
-				console.log("t : " + t);
+				s += posts["addr" + i];
 				s += "</td>";
 				s += "<td>";
-				s += "--";
+				s += posts["text" + i];
+				s += "</td>";
+				s += "<td>";
+				s += posts["time" + i];
 				s += "</td>";
 				s += "</tr>";
 			}
