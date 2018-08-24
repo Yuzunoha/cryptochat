@@ -1,2 +1,2 @@
-# cryptchat
-https://yuzunoha.github.io/cryptchat/
+# cryptochat
+https://yuzunoha.github.io/cryptochat/
